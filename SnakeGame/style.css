@@ -1,0 +1,25 @@
+body {
+    background-color: blue;
+}
+
+#title {
+    color: white;
+    text-align: center;
+}
+
+#game_section {
+    background-color: black;
+    margin: auto;
+    height: 700px;
+    width: 700px;
+}
+
+#snake {
+    position: relative;
+    background-color: aqua;
+    height: 30px;
+    width: 30px;
+}
+
+
+
