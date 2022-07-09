@@ -21,5 +21,13 @@ body {
     width: 30px;
 }
 
+#apple {
+    position: relative;
+    border-radius: 50%;
+    background-color: red;
+    height: 30px;
+    width: 30px;
+}
+
 
 
