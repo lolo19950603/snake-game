@@ -2,12 +2,12 @@ body {
     background-color: blue;
 }
 
-#title {
+#title, #score-board {
     color: white;
     text-align: center;
 }
 
-#game_section {
+#game-section {
     background-color: black;
     margin: auto;
     height: 700px;
