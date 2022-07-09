@@ -5,6 +5,8 @@ let currentDirection = "right";
 
 let browerDimensions = { width: 670, height: 670 };
 
+Math.floor(Math.random() * 671);
+
 
 
 // function updateGameDimension() {
