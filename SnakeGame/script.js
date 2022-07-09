@@ -1,12 +1,45 @@
 const snake = document.querySelector("#snake");
+const $snake = $('#snake');
+const $apple = $('#apple');
 
-let currentPosition = { x: 0, y: 0 };
+let gameSize = 670;
+let currentSnakePosition = { x: 0, y: 0 };
+let currentApplePosition = { x: 0, y: 0 };
+initializePosition();
 let currentDirection = "right";
 
-let browerDimensions = { width: 670, height: 670 };
+let browerDimensions = { width: gameSize, height: gameSize };
 
-Math.floor(Math.random() * 671);
+function appleRespawnPos() {
+  currentApplePosition.x = Math.floor(Math.random() * 671);
+  currentApplePosition.y = Math.floor(Math.random() * 671) - 30;
+}
 
+function initializePosition() {
+  // initialize apple's position
+  currentApplePosition.x = Math.floor(Math.random() * 671);
+  currentApplePosition.y = Math.floor(Math.random() * 671) - 30;
+  renderPosition($apple);
+  // initialize snake's position
+  currentSnakePosition.x = Math.floor(gameSize/2);
+  currentSnakePosition.y = Math.floor(gameSize/2);
+  renderPosition($snake);
+}
+
+function renderPosition(jQueryObject) {
+  if (jQueryObject === $apple) {
+    $apple.css({'background-color': 'red',
+                'top': currentApplePosition.y.toString() + 'px',
+                'left': currentApplePosition.x.toString() + 'px'
+              });
+  }
+  else if (jQueryObject === $snake) {
+    $snake.css({'background-color': 'aqua',
+                'top': currentSnakePosition.y.toString() + 'px',
+                'left': currentSnakePosition.x.toString() + 'px'
+  });
+  }
+}
 
 
 // function updateGameDimension() {
@@ -14,43 +47,41 @@ Math.floor(Math.random() * 671);
 //   browerDimensions.height = window.innerHeight;
 // }
 
+
+setInterval(() => {
+  appleRespawnPos();
+  renderPosition($apple);
+}, 1000)
+
 setInterval(() => {
   if (currentDirection === "right") {
-    if (currentPosition.x === browerDimensions.width) {
-      currentPosition.x = 0;
+    if (currentSnakePosition.x === browerDimensions.width) {
+      currentSnakePosition.x = 0;
     } else {
-      currentPosition.x++;
+      currentSnakePosition.x++;
     }
-    snake.style =
-      "top: " + currentPosition.y.toString() + "px; " +
-      "left: " + currentPosition.x.toString() + "px;";
+    renderPosition($snake);
   } else if (currentDirection === "left") {
-    if (currentPosition.x === 0) {
-      currentPosition.x = browerDimensions.width;
+    if (currentSnakePosition.x === 0) {
+      currentSnakePosition.x = browerDimensions.width;
     } else {
-      currentPosition.x--;
+      currentSnakePosition.x--;
     }
-    snake.style =
-      "top: " + currentPosition.y.toString() + "px; " +
-      "left: " + currentPosition.x.toString() + "px;";
+    renderPosition($snake);
   } else if (currentDirection === "down") {
-    if (currentPosition.y === browerDimensions.height) {
-      currentPosition.y = 0;
+    if (currentSnakePosition.y === browerDimensions.height) {
+      currentSnakePosition.y = 0;
     } else {
-      currentPosition.y++;
+      currentSnakePosition.y++;
     }
-    snake.style =
-      "top: " + currentPosition.y.toString() + "px; " +
-      "left: " + currentPosition.x.toString() + "px;";
+    renderPosition($snake);
   } else if (currentDirection === "up") {
-    if (currentPosition.y === 0) {
-      currentPosition.y = browerDimensions.height;
+    if (currentSnakePosition.y === 0) {
+      currentSnakePosition.y = browerDimensions.height;
     } else {
-      currentPosition.y--;
+      currentSnakePosition.y--;
     }
-    snake.style =
-      "top: " + currentPosition.y.toString() + "px; " +
-      "left: " + currentPosition.x.toString() + "px;";
+    renderPosition($snake);
   }
 }, 5);
 

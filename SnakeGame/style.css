@@ -16,7 +16,6 @@ body {
 
 #snake {
     position: relative;
-    background-color: aqua;
     height: 30px;
     width: 30px;
 }
@@ -24,7 +23,6 @@ body {
 #apple {
     position: relative;
     border-radius: 50%;
-    background-color: red;
     height: 30px;
     width: 30px;
 }
