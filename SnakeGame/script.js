@@ -1,68 +1,57 @@
-const $body = $('body');
-const $snake = $('#snake');
-const $apple = $('#apple');
+const $body = $("body");
+const $game = $("#game-section");
+let $snake = $(".snake");
+const $apple = $("#apple");
 
-let gameObjectSize = 25;
-let snakeCurrentSize = gameObjectSize;
-let gameSize = 700 - gameObjectSize;
-let currentSnakePosition = { x: 0, y: 0 };
+let scoreCount = 0;
+let gameSpeed = 500//75;
+let gameObjectSize = 30;
+let gameSize = 630 / gameObjectSize;
+let snakeBodyCount = 0;
 let currentApplePosition = { x: 0, y: 0 };
-initializePosition();
-let currentDirection = "right";
-
-let browserDimensions = { width: gameSize, height: gameSize };
+const snakeLocation = [];
+let currentDirection = "";
 
 function appleRespawnPos() {
-  currentApplePosition.x = Math.floor(Math.random() * 671);
-  currentApplePosition.y = Math.floor(Math.random() * 671);
+  currentApplePosition.x = Math.floor(Math.random() * gameSize) + 1;
+  currentApplePosition.y = Math.floor(Math.random() * gameSize) + 1;
 }
 
 function initializePosition() {
   // initialize apple's position
-  appleRespawnPos()
+  appleRespawnPos();
   renderPosition($apple);
   // initialize snake's position
-  currentSnakePosition.x = Math.floor(gameSize/2);
-  currentSnakePosition.y = Math.floor(gameSize/2);
+  snakeLocation.push({x: Math.ceil(gameSize / 2), y: Math.ceil(gameSize / 2)});
   renderPosition($snake);
 }
 
 function renderPosition(jQueryObject) {
   if (jQueryObject === $apple) {
-    $apple.css({'background-color': 'red',
-                'top': (currentApplePosition.y - gameObjectSize).toString() + 'px',
-                'left': currentApplePosition.x.toString() + 'px'
-              });
-  }
-  else if (jQueryObject === $snake) {
-    $snake.css({'background-color': 'aqua',
-                'top': currentSnakePosition.y.toString() + 'px',
-                'left': currentSnakePosition.x.toString() + 'px'
-  });
+    const actualPosX = (currentApplePosition.x - 1) * gameObjectSize;
+    const actualPosY = (currentApplePosition.y - 1) * gameObjectSize;
+    jQueryObject.css({
+      "background-color": "red",
+      top: actualPosY.toString() + "px",
+      left: actualPosX.toString() + "px",
+    });
+  } else if (jQueryObject === $snake) {
+    snakeLocation.forEach((snakeBlock, pos) => {
+      let actualPosX = (snakeBlock.x - 1) * gameObjectSize;
+      let actualPosY = (snakeBlock.y - 1) * gameObjectSize;
+      let $currentBlock = $(jQueryObject[pos]);
+      $currentBlock.css({
+        "background-color": "aqua",
+        top: actualPosY.toString() + "px",
+        left: actualPosX.toString() + "px",
+      });
+    });
   }
 }
 
 function snakeEatsApple() {
-  const snakeRightPos = currentSnakePosition.x + gameObjectSize;
-  const snakeLeftPos = currentSnakePosition.x;
-  const snakeTopPos = currentSnakePosition.y;
-  const snakeBottomPos = currentSnakePosition.y + gameObjectSize;
-  const appleRightPos = currentApplePosition.x + gameObjectSize;
-  const appleLeftPos = currentApplePosition.x;
-  const appleTopPos = currentApplePosition.y;
-  const appleBottomPos = currentApplePosition.y + gameObjectSize;
-  if (appleLeftPos > snakeLeftPos && appleLeftPos < snakeRightPos) {
-    if (appleTopPos < snakeBottomPos && appleTopPos > snakeTopPos) {
-      return true;
-    } else if (appleBottomPos < snakeBottomPos && appleBottomPos > snakeTopPos) {
-      return true;
-    } else {
-      return false;
-    }
-  } else if (appleRightPos > snakeLeftPos && appleRightPos < snakeRightPos) {
-    if (appleTopPos < snakeBottomPos && appleTopPos > snakeTopPos) {
-      return true;
-    } else if (appleBottomPos < snakeBottomPos && appleBottomPos > snakeTopPos) {
+  if (snakeLocation[0].x === currentApplePosition.x) {
+    if (snakeLocation[0].y === currentApplePosition.y) {
       return true;
     } else {
       return false;
@@ -73,74 +62,115 @@ function snakeEatsApple() {
 }
 
 function snakeGrowUp() {
+  snakeBodyCount++;
+  const $new_div = $('<div class="snake"></div>');
+  let newBodyPositionX;
+  let newBodyPositionY;
+  let lastBlockDirection = snakeLocation[snakeLocation.length - 1].direction;
+  if (lastBlockDirection === "Right") {
+    newBodyPositionX = snakeLocation[snakeLocation.length - 1].x - 1;
+    newBodyPositionY = snakeLocation[snakeLocation.length - 1].y;
+  } else if (lastBlockDirection === "left") {
+    newBodyPositionX = snakeLocation[snakeLocation.length - 1].x + 1;
+    newBodyPositionY = snakeLocation[snakeLocation.length - 1].y;
+  } else if (lastBlockDirection === "down") {
+    newBodyPositionX = snakeLocation[snakeLocation.length - 1].x;
+    newBodyPositionY = snakeLocation[snakeLocation.length - 1].y - 1;
+  } else if (lastBlockDirection === "up") {
+    newBodyPositionX = snakeLocation[snakeLocation.length - 1].x;
+    newBodyPositionY = snakeLocation[snakeLocation.length - 1].y + 1;
+  }
+  snakeLocation.push({ x: newBodyPositionX, y: newBodyPositionY});
+  $game.append($new_div);
+  $snake = $(".snake");
+}
+
+function updateSnakePosition(direction) {
+  for (let i = (snakeLocation.length - 1); i > 0; i--) {
+    snakeLocation[i].x = snakeLocation[i-1].x;
+    snakeLocation[i].y = snakeLocation[i-1].y;
+  }
   if (currentDirection === "right") {
-    currentSnakePosition.x = currentSnakePosition.x - gameObjectSize;
-    snakeCurrentSize = snakeCurrentSize + gameObjectSize
-    $snake.css({'width': snakeCurrentSize.toString() + 'px'});
+    snakeLocation[0].x++;
   } else if (currentDirection === "left") {
-
+    snakeLocation[0].x--;
   } else if (currentDirection === "down") {
-
+    snakeLocation[0].y++;
   } else if (currentDirection === "up") {
-
+    snakeLocation[0].y--;
   }
 }
 
-
-// function updateGameDimension() {
-//   browserDimensions.width = window.innerWidth;
-//   browserDimensions.height = window.innerHeight;
+// function updategameDimensions() {
+//   gameSize = window.innerWidth;
+//   gameSize = window.innerHeight;
 // }
 
 // actual game
+initializePosition();
 setInterval(() => {
   if (snakeEatsApple()) {
+    scoreCount++;
     appleRespawnPos();
     snakeGrowUp();
+    renderPosition($snake);
     renderPosition($apple);
   } else {
     if (currentDirection === "right") {
-      if (currentSnakePosition.x === browserDimensions.width) {
-        currentSnakePosition.x = 0;
+      if (snakeLocation[0].x === gameSize) {
+        //game over!
       } else {
-        currentSnakePosition.x++;
+        updateSnakePosition();
       }
       renderPosition($snake);
     } else if (currentDirection === "left") {
-      if (currentSnakePosition.x === 0) {
-        currentSnakePosition.x = browserDimensions.width;
+      if (snakeLocation[0].x === 1) {
+        //game over!
       } else {
-        currentSnakePosition.x--;
+        updateSnakePosition();
       }
       renderPosition($snake);
     } else if (currentDirection === "down") {
-      if (currentSnakePosition.y === browserDimensions.height) {
-        currentSnakePosition.y = 0;
+      if (snakeLocation[0].y === gameSize) {
+        //game over!
       } else {
-        currentSnakePosition.y++;
+        updateSnakePosition();
       }
       renderPosition($snake);
     } else if (currentDirection === "up") {
-      if (currentSnakePosition.y === 0) {
-        currentSnakePosition.y = browserDimensions.height;
+      if (snakeLocation[0].y === 1) {
+        //game over!
       } else {
-        currentSnakePosition.y--;
+        updateSnakePosition();
       }
       renderPosition($snake);
     }
-  }
-}, 5);
+  }console.log(snakeLocation[snakeLocation.length-1]);
+}, gameSpeed);
 
 function handleMove(e) {
   if (e.keyCode === 38) {
-    currentDirection = "up";
+    if (currentDirection !== "down") {
+      currentDirection = "up";
+    }
   } else if (e.keyCode === 40) {
-    currentDirection = "down";
+    if (currentDirection !== "up") {
+      currentDirection = "down";
+    }
   } else if (e.keyCode === 37) {
-    currentDirection = "left";
+    if (currentDirection !== "right") {
+      currentDirection = "left";
+    }
   } else if (e.keyCode === 39) {
-    currentDirection = "right";
+    if (currentDirection !== "left") {
+      currentDirection = "right";
+    }
   }
 }
 
 $body.keydown(handleMove);
+
+// $new_div.css({'background-color': 'aqua',
+//     'top': (newBodyPositionY*gameObjectSize).toString() + 'px',
+//     'left': (newBodyPositionX*gameObjectSize).toString() + 'px'
+//     });
