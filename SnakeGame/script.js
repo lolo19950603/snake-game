@@ -2,13 +2,13 @@ const $body = $('body');
 const $game = $('#game-section');
 let $snake = $('.snake');
 const $apple = $('#apple');
-const $score = $('#score')
+const $score = $('#score');
+const $bestScore = $('#best');
 
 let scoreCount = 0;
-let gameSpeed = 150;
+let gameSpeed = 75;
 let gameObjectSize = 30;
 let gameSize = 630 / gameObjectSize;
-let snakeBodyCount = 0;
 let currentApplePosition = { x: 0, y: 0 };
 const snakeLocation = [];
 let currentDirection = "";
@@ -16,6 +16,10 @@ let currentDirection = "";
 function appleRespawnPos() {
   currentApplePosition.x = Math.floor(Math.random() * gameSize) + 1;
   currentApplePosition.y = Math.floor(Math.random() * gameSize) + 1;
+  while (snakeLocation.filter(snakeblock => compareLocation(currentApplePosition, snakeblock)).length !== 0) {
+    currentApplePosition.x = Math.floor(Math.random() * gameSize) + 1;
+    currentApplePosition.y = Math.floor(Math.random() * gameSize) + 1;
+  }
 }
 
 function initializePosition() {
@@ -63,10 +67,9 @@ function snakeEatsApple() {
 }
 
 function snakeGrowUp() {
-  snakeBodyCount++;
   const $new_div = $('<div class="snake"></div>');
-  const  newBodyPositionX = snakeLocation[snakeLocation.length - 1].x;
-  const  newBodyPositionY = snakeLocation[snakeLocation.length - 1].y;
+  let  newBodyPositionX;
+  let  newBodyPositionY;
   snakeLocation.push({ x: newBodyPositionX, y: newBodyPositionY});
   $game.append($new_div);
   $snake = $(".snake");
@@ -88,10 +91,26 @@ function updateSnakePosition(direction) {
   }
 }
 
-// function updategameDimensions() {
-//   gameSize = window.innerWidth;
-//   gameSize = window.innerHeight;
-// }
+function compareLocation(snakeBlock1, snakeBlock2) {
+  if (snakeBlock1.x === snakeBlock2.x) {
+    if (snakeBlock1.y === snakeBlock2.y) {
+      return true
+    } else {
+      return false
+    } 
+  } else {
+    return false
+  }
+}
+
+function snakeTouchesItself() {
+  duplicatePos = snakeLocation.filter(snakeBlock => compareLocation(snakeBlock, snakeLocation[0])).length;
+  if (duplicatePos > 1) {
+    return true
+  } else {
+    return false
+  }
+}
 
 // actual game
 initializePosition();
@@ -100,33 +119,37 @@ setInterval(() => {
     scoreCount++;
     appleRespawnPos();
     snakeGrowUp();
+    updateSnakePosition();
     renderPosition($apple);
+    renderPosition($snake);
     $score.html(scoreCount.toString());
+  } else if (snakeTouchesItself()) {
+    $bestScore.html(scoreCount.toString());
   } else {
     if (currentDirection === "right") {
       if (snakeLocation[0].x === gameSize) {
-        //game over!
+        $bestScore.html(scoreCount.toString());
       } else {
         updateSnakePosition();
       }
       renderPosition($snake);
     } else if (currentDirection === "left") {
       if (snakeLocation[0].x === 1) {
-        //game over!
+        $bestScore.html(scoreCount.toString());
       } else {
         updateSnakePosition();
       }
       renderPosition($snake);
     } else if (currentDirection === "down") {
       if (snakeLocation[0].y === gameSize) {
-        //game over!
+        $bestScore.html(scoreCount.toString());
       } else {
         updateSnakePosition();
       }
       renderPosition($snake);
     } else if (currentDirection === "up") {
       if (snakeLocation[0].y === 1) {
-        //game over!
+        $bestScore.html(scoreCount.toString());
       } else {
         updateSnakePosition();
       }
@@ -156,8 +179,3 @@ function handleMove(e) {
 }
 
 $body.keydown(handleMove);
-
-// $new_div.css({'background-color': 'aqua',
-//     'top': (newBodyPositionY*gameObjectSize).toString() + 'px',
-//     'left': (newBodyPositionX*gameObjectSize).toString() + 'px'
-//     });
