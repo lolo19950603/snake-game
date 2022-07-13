@@ -4,7 +4,7 @@ let $snake = $(".snake");
 const $apple = $("#apple");
 
 let scoreCount = 0;
-let gameSpeed = 500//75;
+let gameSpeed = 75;
 let gameObjectSize = 30;
 let gameSize = 630 / gameObjectSize;
 let snakeBodyCount = 0;
@@ -64,22 +64,8 @@ function snakeEatsApple() {
 function snakeGrowUp() {
   snakeBodyCount++;
   const $new_div = $('<div class="snake"></div>');
-  let newBodyPositionX;
-  let newBodyPositionY;
-  let lastBlockDirection = snakeLocation[snakeLocation.length - 1].direction;
-  if (lastBlockDirection === "Right") {
-    newBodyPositionX = snakeLocation[snakeLocation.length - 1].x - 1;
-    newBodyPositionY = snakeLocation[snakeLocation.length - 1].y;
-  } else if (lastBlockDirection === "left") {
-    newBodyPositionX = snakeLocation[snakeLocation.length - 1].x + 1;
-    newBodyPositionY = snakeLocation[snakeLocation.length - 1].y;
-  } else if (lastBlockDirection === "down") {
-    newBodyPositionX = snakeLocation[snakeLocation.length - 1].x;
-    newBodyPositionY = snakeLocation[snakeLocation.length - 1].y - 1;
-  } else if (lastBlockDirection === "up") {
-    newBodyPositionX = snakeLocation[snakeLocation.length - 1].x;
-    newBodyPositionY = snakeLocation[snakeLocation.length - 1].y + 1;
-  }
+  const  newBodyPositionX = snakeLocation[snakeLocation.length - 1].x;
+  const  newBodyPositionY = snakeLocation[snakeLocation.length - 1].y;
   snakeLocation.push({ x: newBodyPositionX, y: newBodyPositionY});
   $game.append($new_div);
   $snake = $(".snake");
