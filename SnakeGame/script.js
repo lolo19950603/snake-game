@@ -1,10 +1,11 @@
-const $body = $("body");
-const $game = $("#game-section");
-let $snake = $(".snake");
-const $apple = $("#apple");
+const $body = $('body');
+const $game = $('#game-section');
+let $snake = $('.snake');
+const $apple = $('#apple');
+const $score = $('#score')
 
 let scoreCount = 0;
-let gameSpeed = 75;
+let gameSpeed = 150;
 let gameObjectSize = 30;
 let gameSize = 630 / gameObjectSize;
 let snakeBodyCount = 0;
@@ -99,8 +100,8 @@ setInterval(() => {
     scoreCount++;
     appleRespawnPos();
     snakeGrowUp();
-    renderPosition($snake);
     renderPosition($apple);
+    $score.html(scoreCount.toString());
   } else {
     if (currentDirection === "right") {
       if (snakeLocation[0].x === gameSize) {
@@ -131,7 +132,7 @@ setInterval(() => {
       }
       renderPosition($snake);
     }
-  }console.log(snakeLocation[snakeLocation.length-1]);
+  }
 }, gameSpeed);
 
 function handleMove(e) {

@@ -21,6 +21,7 @@ body {
     width: 30px;
     left: 5px;
     top: 5px;
+    z-index: 1;
 }
 
 #apple {
@@ -28,4 +29,5 @@ body {
     border-radius: 50%;
     height: 30px;
     width: 30px;
+    z-index: 0;
 }
