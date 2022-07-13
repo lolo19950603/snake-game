@@ -4,7 +4,10 @@ let $snake = $('.snake');
 const $apple = $('#apple');
 const $score = $('#score');
 const $bestScore = $('#best');
+const $gameOver = $('#game-over');
+const $restart = $('#restart');
 
+let gameOver = false;
 let scoreCount = 0;
 let gameSpeed = 75;
 let gameObjectSize = 30;
@@ -27,6 +30,8 @@ function initializePosition() {
   appleRespawnPos();
   renderPosition($apple);
   // initialize snake's position
+  snakeLocation.splice(0, snakeLocation.length+1);
+  currentDirection = '';
   snakeLocation.push({x: Math.ceil(gameSize / 2), y: Math.ceil(gameSize / 2)});
   renderPosition($snake);
 }
@@ -123,33 +128,36 @@ setInterval(() => {
     renderPosition($apple);
     renderPosition($snake);
     $score.html(scoreCount.toString());
+  } else if (gameOver === true) {
+        $bestScore.html(scoreCount.toString());
+        $gameOver.css({opacity: 0.8});
   } else if (snakeTouchesItself()) {
-    $bestScore.html(scoreCount.toString());
+    gameOver = true;
   } else {
     if (currentDirection === "right") {
       if (snakeLocation[0].x === gameSize) {
-        $bestScore.html(scoreCount.toString());
+        gameOver = true;
       } else {
         updateSnakePosition();
       }
       renderPosition($snake);
     } else if (currentDirection === "left") {
       if (snakeLocation[0].x === 1) {
-        $bestScore.html(scoreCount.toString());
+        gameOver = true;
       } else {
         updateSnakePosition();
       }
       renderPosition($snake);
     } else if (currentDirection === "down") {
       if (snakeLocation[0].y === gameSize) {
-        $bestScore.html(scoreCount.toString());
+        gameOver = true;
       } else {
         updateSnakePosition();
       }
       renderPosition($snake);
     } else if (currentDirection === "up") {
       if (snakeLocation[0].y === 1) {
-        $bestScore.html(scoreCount.toString());
+        gameOver = true;
       } else {
         updateSnakePosition();
       }
@@ -178,4 +186,13 @@ function handleMove(e) {
   }
 }
 
+function handleClick(e) {
+  if (gameOver === true) {
+    initializePosition();
+    $gameOver.css({opacity: 0});
+    gameOver = false;
+  }
+}
+
 $body.keydown(handleMove);
+$restart.click(handleClick);
