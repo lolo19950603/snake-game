@@ -6,6 +6,7 @@ const $score = $('#score');
 const $bestScore = $('#best');
 const $gameOver = $('#game-over');
 const $restart = $('#restart');
+let $snakeBody = $('.snake.body');
 
 let gameOver = false;
 let scoreCount = 0;
@@ -17,8 +18,8 @@ const snakeLocation = [];
 let currentDirection = "";
 
 function appleRespawnPos() {
-  currentApplePosition.x = Math.floor(Math.random() * gameSize) + 1;
-  currentApplePosition.y = Math.floor(Math.random() * gameSize) + 1;
+  currentApplePosition.x = 11//Math.floor(Math.random() * gameSize) + 1;
+  currentApplePosition.y = 21//Math.floor(Math.random() * gameSize) + 1;
   while (snakeLocation.filter(snakeblock => compareLocation(currentApplePosition, snakeblock)).length !== 0) {
     currentApplePosition.x = Math.floor(Math.random() * gameSize) + 1;
     currentApplePosition.y = Math.floor(Math.random() * gameSize) + 1;
@@ -30,6 +31,8 @@ function initializePosition() {
   appleRespawnPos();
   renderPosition($apple);
   // initialize snake's position
+  $snakeBody = $('.snake.body');
+  $snakeBody.remove();
   snakeLocation.splice(0, snakeLocation.length+1);
   currentDirection = '';
   snakeLocation.push({x: Math.ceil(gameSize / 2), y: Math.ceil(gameSize / 2)});
@@ -72,7 +75,7 @@ function snakeEatsApple() {
 }
 
 function snakeGrowUp() {
-  const $new_div = $('<div class="snake"></div>');
+  const $new_div = $('<div class="snake body"></div>');
   let  newBodyPositionX;
   let  newBodyPositionY;
   snakeLocation.push({ x: newBodyPositionX, y: newBodyPositionY});
@@ -85,13 +88,13 @@ function updateSnakePosition(direction) {
     snakeLocation[i].x = snakeLocation[i-1].x;
     snakeLocation[i].y = snakeLocation[i-1].y;
   }
-  if (currentDirection === "right") {
+  if (currentDirection === "right" && snakeLocation[0].x !== gameSize) {
     snakeLocation[0].x++;
-  } else if (currentDirection === "left") {
+  } else if (currentDirection === "left" && snakeLocation[0].x !== 1) {
     snakeLocation[0].x--;
-  } else if (currentDirection === "down") {
+  } else if (currentDirection === "down" && snakeLocation[0].y !== gameSize) {
     snakeLocation[0].y++;
-  } else if (currentDirection === "up") {
+  } else if (currentDirection === "up" && snakeLocation[0].y !== 1) {
     snakeLocation[0].y--;
   }
 }
@@ -125,18 +128,19 @@ setInterval(() => {
     appleRespawnPos();
     snakeGrowUp();
     updateSnakePosition();
-    renderPosition($apple);
     renderPosition($snake);
+    renderPosition($apple);
     $score.html(scoreCount.toString());
-  } else if (gameOver === true) {
-        $bestScore.html(scoreCount.toString());
-        $gameOver.css({opacity: 0.8});
   } else if (snakeTouchesItself()) {
     gameOver = true;
+    $bestScore.html(scoreCount.toString());
+    $gameOver.css({opacity: 0.8});
   } else {
     if (currentDirection === "right") {
       if (snakeLocation[0].x === gameSize) {
         gameOver = true;
+        $bestScore.html(scoreCount.toString());
+        $gameOver.css({opacity: 0.8});
       } else {
         updateSnakePosition();
       }
@@ -144,6 +148,8 @@ setInterval(() => {
     } else if (currentDirection === "left") {
       if (snakeLocation[0].x === 1) {
         gameOver = true;
+        $bestScore.html(scoreCount.toString());
+        $gameOver.css({opacity: 0.8});
       } else {
         updateSnakePosition();
       }
@@ -151,6 +157,8 @@ setInterval(() => {
     } else if (currentDirection === "down") {
       if (snakeLocation[0].y === gameSize) {
         gameOver = true;
+        $bestScore.html(scoreCount.toString());
+        $gameOver.css({opacity: 0.8});
       } else {
         updateSnakePosition();
       }
@@ -158,6 +166,8 @@ setInterval(() => {
     } else if (currentDirection === "up") {
       if (snakeLocation[0].y === 1) {
         gameOver = true;
+        $bestScore.html(scoreCount.toString());
+        $gameOver.css({opacity: 0.8});
       } else {
         updateSnakePosition();
       }
