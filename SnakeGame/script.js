@@ -18,8 +18,8 @@ const snakeLocation = [];
 let currentDirection = "";
 
 function appleRespawnPos() {
-  currentApplePosition.x = 11//Math.floor(Math.random() * gameSize) + 1;
-  currentApplePosition.y = 21//Math.floor(Math.random() * gameSize) + 1;
+  currentApplePosition.x = Math.floor(Math.random() * gameSize) + 1;
+  currentApplePosition.y = Math.floor(Math.random() * gameSize) + 1;
   while (snakeLocation.filter(snakeblock => compareLocation(currentApplePosition, snakeblock)).length !== 0) {
     currentApplePosition.x = Math.floor(Math.random() * gameSize) + 1;
     currentApplePosition.y = Math.floor(Math.random() * gameSize) + 1;
