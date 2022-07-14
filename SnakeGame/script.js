@@ -123,7 +123,9 @@ function snakeTouchesItself() {
 // actual game
 initializePosition();
 setInterval(() => {
-  if (snakeEatsApple()) {
+  if (gameOver === true) {
+    // wait for restart button
+  } else if (snakeEatsApple()) {
     scoreCount++;
     appleRespawnPos();
     snakeGrowUp();
