@@ -10,6 +10,7 @@ let $snakeBody = $('.snake.body');
 
 let gameOver = false;
 let scoreCount = 0;
+let bestScore = 0;
 let gameSpeed = 75;
 let gameObjectSize = 30;
 let gameSize = 630 / gameObjectSize;
@@ -27,6 +28,9 @@ function appleRespawnPos() {
 }
 
 function initializePosition() {
+  // initialize scoreboard
+  scoreCount = 0;
+  $score.html(scoreCount.toString());
   // initialize apple's position
   appleRespawnPos();
   renderPosition($apple);
@@ -135,13 +139,19 @@ setInterval(() => {
     $score.html(scoreCount.toString());
   } else if (snakeTouchesItself()) {
     gameOver = true;
-    $bestScore.html(scoreCount.toString());
+    if (scoreCount > bestScore) {
+      bestScore = scoreCount;
+      $bestScore.html(bestScore.toString());
+    }
     $gameOver.css({opacity: 0.8});
   } else {
     if (currentDirection === "right") {
       if (snakeLocation[0].x === gameSize) {
         gameOver = true;
-        $bestScore.html(scoreCount.toString());
+        if (scoreCount > bestScore) {
+          bestScore = scoreCount;
+          $bestScore.html(bestScore.toString());
+        }
         $gameOver.css({opacity: 0.8});
       } else {
         updateSnakePosition();
@@ -150,7 +160,10 @@ setInterval(() => {
     } else if (currentDirection === "left") {
       if (snakeLocation[0].x === 1) {
         gameOver = true;
-        $bestScore.html(scoreCount.toString());
+        if (scoreCount > bestScore) {
+          bestScore = scoreCount;
+          $bestScore.html(bestScore.toString());
+        }
         $gameOver.css({opacity: 0.8});
       } else {
         updateSnakePosition();
@@ -159,7 +172,10 @@ setInterval(() => {
     } else if (currentDirection === "down") {
       if (snakeLocation[0].y === gameSize) {
         gameOver = true;
-        $bestScore.html(scoreCount.toString());
+        if (scoreCount > bestScore) {
+          bestScore = scoreCount;
+          $bestScore.html(bestScore.toString());
+        }
         $gameOver.css({opacity: 0.8});
       } else {
         updateSnakePosition();
@@ -168,7 +184,10 @@ setInterval(() => {
     } else if (currentDirection === "up") {
       if (snakeLocation[0].y === 1) {
         gameOver = true;
-        $bestScore.html(scoreCount.toString());
+        if (scoreCount > bestScore) {
+          bestScore = scoreCount;
+          $bestScore.html(bestScore.toString());
+        }
         $gameOver.css({opacity: 0.8});
       } else {
         updateSnakePosition();
