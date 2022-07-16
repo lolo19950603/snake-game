@@ -258,8 +258,8 @@ function handleGameOverClick(e) {
   }
 }
 
+// start by initializing the game.
 initializePosition();
-// $game.toggle();
 
 $body.keydown(handleMove);
 $buttons.click(handleGameOverClick);
