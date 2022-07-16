@@ -4,14 +4,18 @@ let $snake = $('.snake');
 const $apple = $('#apple');
 const $score = $('#score');
 const $bestScore = $('#best');
-const $gameOver = $('#game-over');
-const $restart = $('#restart');
+const $popUp = $('#pop-up');
+const $buttons = $('.button');
+const $restartButton = $('#restart');
+const $startButtons = $('.start');
 let $snakeBody = $('.snake.body');
+const $popUpMsg = $('#pop-up-msg');
+
 
 let gameOver = false;
 let scoreCount = 0;
 let bestScore = 0;
-let gameSpeed = 75;
+let gameSpeed = 100;
 let gameObjectSize = 30;
 let gameSize = 630 / gameObjectSize;
 let currentApplePosition = { x: 0, y: 0 };
@@ -124,78 +128,86 @@ function snakeTouchesItself() {
   }
 }
 
-// actual game
-initializePosition();
-setInterval(() => {
-  if (gameOver === true) {
-    // wait for restart button
-  } else if (snakeEatsApple()) {
-    scoreCount++;
-    appleRespawnPos();
-    snakeGrowUp();
-    updateSnakePosition();
-    renderPosition($snake);
-    renderPosition($apple);
-    $score.html(scoreCount.toString());
-  } else if (snakeTouchesItself()) {
-    gameOver = true;
-    if (scoreCount > bestScore) {
-      bestScore = scoreCount;
-      $bestScore.html(bestScore.toString());
+function gameOverPage() {
+  $popUpMsg.html('GAME OVER');
+  $restartButton.toggle();
+  $startButtons.toggle();
+  $popUp.fadeIn()
+}
+
+
+function startGame() {
+  setInterval(() => {
+    if (gameOver === true) {
+      // wait for restart button
+    } else if (snakeEatsApple()) {
+      scoreCount++;
+      appleRespawnPos();
+      snakeGrowUp();
+      updateSnakePosition();
+      renderPosition($snake);
+      renderPosition($apple);
+      $score.html(scoreCount.toString());
+    } else if (snakeTouchesItself()) {
+      gameOver = true;
+      if (scoreCount > bestScore) {
+        bestScore = scoreCount;
+        $bestScore.html(bestScore.toString());
+      }
+      gameOverPage()
+    } else {
+      if (currentDirection === "right") {
+        if (snakeLocation[0].x === gameSize) {
+          gameOver = true;
+          if (scoreCount > bestScore) {
+            bestScore = scoreCount;
+            $bestScore.html(bestScore.toString());
+          }
+          gameOverPage()
+        } else {
+          updateSnakePosition();
+        }
+        renderPosition($snake);
+      } else if (currentDirection === "left") {
+        if (snakeLocation[0].x === 1) {
+          gameOver = true;
+          if (scoreCount > bestScore) {
+            bestScore = scoreCount;
+            $bestScore.html(bestScore.toString());
+          }
+          gameOverPage()
+        } else {
+          updateSnakePosition();
+        }
+        renderPosition($snake);
+      } else if (currentDirection === "down") {
+        if (snakeLocation[0].y === gameSize) {
+          gameOver = true;
+          if (scoreCount > bestScore) {
+            bestScore = scoreCount;
+            $bestScore.html(bestScore.toString());
+          }
+          gameOverPage()
+        } else {
+          updateSnakePosition();
+        }
+        renderPosition($snake);
+      } else if (currentDirection === "up") {
+        if (snakeLocation[0].y === 1) {
+          gameOver = true;
+          if (scoreCount > bestScore) {
+            bestScore = scoreCount;
+            $bestScore.html(bestScore.toString());
+          }
+          gameOverPage()
+        } else {
+          updateSnakePosition();
+        }
+        renderPosition($snake);
+      }
     }
-    $gameOver.css({opacity: 0.8});
-  } else {
-    if (currentDirection === "right") {
-      if (snakeLocation[0].x === gameSize) {
-        gameOver = true;
-        if (scoreCount > bestScore) {
-          bestScore = scoreCount;
-          $bestScore.html(bestScore.toString());
-        }
-        $gameOver.css({opacity: 0.8});
-      } else {
-        updateSnakePosition();
-      }
-      renderPosition($snake);
-    } else if (currentDirection === "left") {
-      if (snakeLocation[0].x === 1) {
-        gameOver = true;
-        if (scoreCount > bestScore) {
-          bestScore = scoreCount;
-          $bestScore.html(bestScore.toString());
-        }
-        $gameOver.css({opacity: 0.8});
-      } else {
-        updateSnakePosition();
-      }
-      renderPosition($snake);
-    } else if (currentDirection === "down") {
-      if (snakeLocation[0].y === gameSize) {
-        gameOver = true;
-        if (scoreCount > bestScore) {
-          bestScore = scoreCount;
-          $bestScore.html(bestScore.toString());
-        }
-        $gameOver.css({opacity: 0.8});
-      } else {
-        updateSnakePosition();
-      }
-      renderPosition($snake);
-    } else if (currentDirection === "up") {
-      if (snakeLocation[0].y === 1) {
-        gameOver = true;
-        if (scoreCount > bestScore) {
-          bestScore = scoreCount;
-          $bestScore.html(bestScore.toString());
-        }
-        $gameOver.css({opacity: 0.8});
-      } else {
-        updateSnakePosition();
-      }
-      renderPosition($snake);
-    }
-  }
-}, gameSpeed);
+  }, gameSpeed);
+}
 
 function handleMove(e) {
   if (e.keyCode === 38) {
@@ -217,13 +229,37 @@ function handleMove(e) {
   }
 }
 
-function handleClick(e) {
+function handleGameOverClick(e) {
   if (gameOver === true) {
+    $popUpMsg.html('SELECT LEVEL');
     initializePosition();
-    $gameOver.css({opacity: 0});
     gameOver = false;
+    $popUp.toggle();
+    $restartButton.toggle();
+    $popUp.toggle();
+    $startButtons.toggle();
+  } else if (gameOver === false) {
+    if ($(this).html() === "EASY") {
+      initializePosition();
+      gameSpeed = 200;
+      $popUp.fadeOut()
+      startGame()
+    } else if ($(this).html() === "NORMAL") {
+      initializePosition();
+      gameSpeed = 150;
+      $popUp.fadeOut()
+      startGame()
+    } else if ($(this).html() === "HARD") {
+      initializePosition();
+      gameSpeed = 100;
+      $popUp.fadeOut()
+      startGame()
+    }
   }
 }
 
+$popUpMsg.html('SELECT LEVEL');
+$restartButton.toggle();
+
 $body.keydown(handleMove);
-$restart.click(handleClick);
+$buttons.click(handleGameOverClick);
