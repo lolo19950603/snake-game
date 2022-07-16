@@ -33,6 +33,8 @@ function appleRespawnPos() {
 }
 
 function initializePosition() {
+  $popUpMsg.html('SELECT LEVEL');
+  $restartButton.toggle();
   // initialize scoreboard
   scoreCount = 0;
   $score.html(scoreCount.toString());
@@ -234,25 +236,21 @@ function handleMove(e) {
 function handleGameOverClick(e) {
   if (gameOver === true) {
     $popUpMsg.html('SELECT LEVEL');
-    initializePosition();
     gameOver = false;
+    initializePosition();
     $popUp.toggle();
-    $restartButton.toggle();
     $popUp.toggle();
     $startButtons.toggle();
   } else if (gameOver === false) {
     if ($(this).html() === "EASY") {
-      initializePosition();
       gameSpeed = 150;
       $popUp.fadeOut()
       startGame()
     } else if ($(this).html() === "NORMAL") {
-      initializePosition();
       gameSpeed = 100;
       $popUp.fadeOut()
       startGame()
     } else if ($(this).html() === "HARD") {
-      initializePosition();
       gameSpeed = 50;
       $popUp.fadeOut()
       startGame()
@@ -260,8 +258,8 @@ function handleGameOverClick(e) {
   }
 }
 
-$popUpMsg.html('SELECT LEVEL');
-$restartButton.toggle();
+initializePosition();
+// $game.toggle();
 
 $body.keydown(handleMove);
 $buttons.click(handleGameOverClick);
