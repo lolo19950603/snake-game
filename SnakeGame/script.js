@@ -15,12 +15,13 @@ const $popUpMsg = $('#pop-up-msg');
 let gameOver = false;
 let scoreCount = 0;
 let bestScore = 0;
-let gameSpeed = 100;
+let gameSpeed = 1000;
 let gameObjectSize = 30;
 let gameSize = 630 / gameObjectSize;
 let currentApplePosition = { x: 0, y: 0 };
 const snakeLocation = [];
 let currentDirection = "";
+let intervalId;
 
 function appleRespawnPos() {
   currentApplePosition.x = Math.floor(Math.random() * gameSize) + 1;
@@ -129,6 +130,7 @@ function snakeTouchesItself() {
 }
 
 function gameOverPage() {
+  clearInterval(intervalId);
   $popUpMsg.html('GAME OVER');
   $restartButton.toggle();
   $startButtons.toggle();
@@ -137,7 +139,7 @@ function gameOverPage() {
 
 
 function startGame() {
-  setInterval(() => {
+  intervalId = setInterval(() => {
     if (gameOver === true) {
       // wait for restart button
     } else if (snakeEatsApple()) {
@@ -241,17 +243,17 @@ function handleGameOverClick(e) {
   } else if (gameOver === false) {
     if ($(this).html() === "EASY") {
       initializePosition();
-      gameSpeed = 200;
+      gameSpeed = 150;
       $popUp.fadeOut()
       startGame()
     } else if ($(this).html() === "NORMAL") {
       initializePosition();
-      gameSpeed = 150;
+      gameSpeed = 100;
       $popUp.fadeOut()
       startGame()
     } else if ($(this).html() === "HARD") {
       initializePosition();
-      gameSpeed = 100;
+      gameSpeed = 50;
       $popUp.fadeOut()
       startGame()
     }
