@@ -3,6 +3,10 @@ body {
     background-color: lightgreen;
 }
 
+body:hover {
+    cursor: default;
+}
+
 #title, #score-board {
     color: black;
     text-align: center;
@@ -10,7 +14,6 @@ body {
 
 #game-section {
     position: relative;
-    background-color: lightgreen;
     border: solid black 5px;
     margin: auto;
     height: 630px;
@@ -67,6 +70,7 @@ button {
     color: white;
     background-color: black;
     transition: 0.7s;
+    cursor: pointer;
 }
 
 #instruction {
