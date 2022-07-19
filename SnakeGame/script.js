@@ -10,6 +10,7 @@ const $restartButton = $('#restart');
 const $startButtons = $('.start');
 let $snakeBody = $('.snake.body');
 const $popUpMsg = $('#pop-up-msg');
+const $instruction = $('#instruction');
 
 
 let gameOver = false;
@@ -55,7 +56,7 @@ function renderPosition(jQueryObject) {
     const actualPosX = (currentApplePosition.x - 1) * gameObjectSize;
     const actualPosY = (currentApplePosition.y - 1) * gameObjectSize;
     jQueryObject.css({
-      "background-color": "red",
+      "background-color": "black",
       top: actualPosY.toString() + "px",
       left: actualPosX.toString() + "px",
     });
@@ -65,7 +66,7 @@ function renderPosition(jQueryObject) {
       let actualPosY = (snakeBlock.y - 1) * gameObjectSize;
       let $currentBlock = $(jQueryObject[pos]);
       $currentBlock.css({
-        "background-color": "aqua",
+        "background-color": "black",
         top: actualPosY.toString() + "px",
         left: actualPosX.toString() + "px",
       });
@@ -214,6 +215,7 @@ function startGame() {
 }
 
 function handleMove(e) {
+  $instruction.css({color: 'transparent'});
   if (e.keyCode === 38) {
     if (currentDirection !== "down") {
       currentDirection = "up";
@@ -233,7 +235,7 @@ function handleMove(e) {
   }
 }
 
-function handleGameOverClick(e) {
+function handleButtonsClick(e) {
   if (gameOver === true) {
     $popUpMsg.html('SELECT LEVEL');
     gameOver = false;
@@ -242,6 +244,7 @@ function handleGameOverClick(e) {
     $popUp.toggle();
     $startButtons.toggle();
   } else if (gameOver === false) {
+    $instruction.css({color: 'red'});
     if ($(this).html() === "EASY") {
       gameSpeed = 150;
       $popUp.fadeOut()
@@ -262,4 +265,4 @@ function handleGameOverClick(e) {
 initializePosition();
 
 $body.keydown(handleMove);
-$buttons.click(handleGameOverClick);
+$buttons.click(handleButtonsClick);
