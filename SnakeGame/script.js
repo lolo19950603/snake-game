@@ -11,6 +11,9 @@ const $startButtons = $('.start');
 let $snakeBody = $('.snake.body');
 const $popUpMsg = $('#pop-up-msg');
 const $instruction = $('#instruction');
+const gameOverSound = document.querySelector('#gameover-sound');
+const eatSound = document.querySelector('#eat-sound');
+const clickSound = document.querySelector('#click-sound');
 
 
 let gameOver = false;
@@ -87,6 +90,7 @@ function snakeEatsApple() {
 }
 
 function snakeGrowUp() {
+  eatSound.play();
   const $new_div = $('<div class="snake body"></div>');
   let  newBodyPositionX;
   let  newBodyPositionY;
@@ -133,6 +137,7 @@ function snakeTouchesItself() {
 }
 
 function gameOverPage() {
+  gameOverSound.play();
   clearInterval(intervalId);
   $popUpMsg.html('GAME OVER');
   $restartButton.toggle();
@@ -168,7 +173,7 @@ function startGame() {
             bestScore = scoreCount;
             $bestScore.html(bestScore.toString());
           }
-          gameOverPage()
+          gameOverPage();
         } else {
           updateSnakePosition();
         }
@@ -180,7 +185,7 @@ function startGame() {
             bestScore = scoreCount;
             $bestScore.html(bestScore.toString());
           }
-          gameOverPage()
+          gameOverPage();
         } else {
           updateSnakePosition();
         }
@@ -191,8 +196,8 @@ function startGame() {
           if (scoreCount > bestScore) {
             bestScore = scoreCount;
             $bestScore.html(bestScore.toString());
-          }
-          gameOverPage()
+          } 
+          gameOverPage();
         } else {
           updateSnakePosition();
         }
@@ -204,7 +209,7 @@ function startGame() {
             bestScore = scoreCount;
             $bestScore.html(bestScore.toString());
           }
-          gameOverPage()
+          gameOverPage();
         } else {
           updateSnakePosition();
         }
@@ -215,6 +220,7 @@ function startGame() {
 }
 
 function handleMove(e) {
+  clickSound.play();
   $instruction.css({color: 'transparent'});
   if (e.keyCode === 38) {
     if (currentDirection !== "down") {
