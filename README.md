@@ -2,7 +2,9 @@
 
 ### Intro
 
-    Snake is a video game genre where the player maneuvers a growing line that becomes a primary obstacle to itself. The concept originated back in 1976 from Gremlin Industries. Since then hundreds of versions has been created. After a version was preloaded on Nokia mobile phones in 1998, there was a surge of interest in snake games.
+    Snake is a video game genre where the player maneuvers a growing line that becomes a primary obstacle to itself.
+    The concept originated back in 1976 from Gremlin Industries. Since then hundreds of versions has been created. 
+    After a version was preloaded on Nokia mobile phones in 1998, there was a surge of interest in snake games.
 
 ### Game Instruction
 
