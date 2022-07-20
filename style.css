@@ -76,7 +76,7 @@ button {
 #instruction {
     animation: blinking 1s linear infinite;
     z-index: 1;
-    color: transparent;
+    color: red;
     position: absolute;
     text-align: center;
     font-size: 20px;
