@@ -237,33 +237,40 @@ function startGame() {
 }
 
 function handleMove(e) {
-  clickSound.play();
   if (pendingDirection.length === 0) {
     $instruction.fadeOut();
     if (e.keyCode === 38) {
+      clickSound.play();
       pendingDirection.push("up");
     } else if (e.keyCode === 40) {
+      clickSound.play();
       pendingDirection.push("down");
     } else if (e.keyCode === 37) {
+      clickSound.play();
       pendingDirection.push("left");
     } else if (e.keyCode === 39) {
+      clickSound.play();
       pendingDirection.push("right");
     }
   } else {
     if (e.keyCode === 38) {
       if (pendingDirection[0] !== "down") {
+        clickSound.play();
         pendingDirection.push("up");
       }
     } else if (e.keyCode === 40) {
       if (pendingDirection[0] !== "up") {
+        clickSound.play();
         pendingDirection.push("down");
       }
     } else if (e.keyCode === 37) {
       if (pendingDirection[0] !== "right") {
+        clickSound.play();
         pendingDirection.push("left");
       }
     } else if (e.keyCode === 39) {
       if (pendingDirection[0] !== "left") {
+        clickSound.play();
         pendingDirection.push("right");
       }
     }
